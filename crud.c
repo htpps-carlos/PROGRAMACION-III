@@ -2,12 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
 
 typedef struct {
     int id;
     char nombre[50];
     char email[50];
     char telefono[20];
+    char fecha_registro[11];
 } Contacto;
 
 typedef struct {
@@ -51,6 +53,22 @@ void cargar(Base *base, const char *archivo) {
     fclose(f);
 }
 
+void crear(Base *base, int id, const char *nombre, const char *email, const char *telefono) {
+    redimensionar(base);
+    Contacto c;
+    c.id = id;
+    strncpy(c.nombre, nombre, 49);
+    c.nombre[49] = '\0';
+    strncpy(c.email, email, 49);
+    c.email[49] = '\0';
+    strncpy(c.telefono, telefono, 19);
+    c.telefono[19] = '\0';
+    time_t t = time(NULL);
+    struct tm *tm_info = localtime(&t);
+    sprintf(c.fecha_registro, "%02d-%02d-%04d", tm_info->tm_mon + 1, tm_info->tm_mday, tm_info->tm_year + 1900);
+    base->contactos[base->cantidad++] = c;
+}
+
 void liberar(Base *base) {
     free(base->contactos);
     free(base);
@@ -70,7 +88,8 @@ int main() {
     Base *base = inicializar();
     cargar(base, "contactos.dat");
 
-    int opcion;
+    int opcion, id;
+    char nombre[50], email[50], telefono[20];
 
     while (1) {
         mostrar_menu();
@@ -83,7 +102,20 @@ int main() {
 
         switch (opcion) {
             case 1:
-                printf("Funcionalidad de creacion aun no implementada.\n");
+                printf("ID: ");
+                scanf("%d", &id);
+                while (getchar() != '\n');
+                printf("Nombre: ");
+                fgets(nombre, 50, stdin);
+                nombre[strcspn(nombre, "\n")] = '\0';
+                printf("Email: ");
+                fgets(email, 50, stdin);
+                email[strcspn(email, "\n")] = '\0';
+                printf("Telefono: ");
+                fgets(telefono, 20, stdin);
+                telefono[strcspn(telefono, "\n")] = '\0';
+                crear(base, id, nombre, email, telefono);
+                printf("Contacto creado.\n");
                 break;
             case 2:
                 printf("Funcionalidad de listado aun no implementada.\n");
