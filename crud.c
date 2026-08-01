@@ -69,6 +69,24 @@ void crear(Base *base, int id, const char *nombre, const char *email, const char
     base->contactos[base->cantidad++] = c;
 }
 
+void leer(Base *base) {
+    if (base->cantidad == 0) {
+        printf("No hay contactos.\n");
+        return;
+    }
+    printf("\n%-5s %-20s %-25s %-15s %-12s\n", "ID", "Nombre", "Email", "Telefono", "Registrado");
+    printf("%-5s %-20s %-25s %-15s %-12s\n", "--", "------", "-----", "--------", "----------");
+    for (int i = 0; i < base->cantidad; i++) {
+        printf("%-5d %-20s %-25s %-15s %-12s\n",
+               base->contactos[i].id,
+               base->contactos[i].nombre,
+               base->contactos[i].email,
+               base->contactos[i].telefono,
+               base->contactos[i].fecha_registro);
+    }
+    printf("\n");
+}
+
 void liberar(Base *base) {
     free(base->contactos);
     free(base);
@@ -118,7 +136,7 @@ int main() {
                 printf("Contacto creado.\n");
                 break;
             case 2:
-                printf("Funcionalidad de listado aun no implementada.\n");
+                leer(base);
                 break;
             case 3:
                 printf("Funcionalidad de actualizacion aun no implementada.\n");
