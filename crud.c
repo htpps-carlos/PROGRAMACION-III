@@ -65,7 +65,7 @@ void crear(Base *base, int id, const char *nombre, const char *email, const char
     c.telefono[19] = '\0';
     time_t t = time(NULL);
     struct tm *tm_info = localtime(&t);
-    sprintf(c.fecha_registro, "%02d-%02d-%04d", tm_info->tm_mon + 1, tm_info->tm_mday, tm_info->tm_year + 1900);
+    sprintf(c.fecha_registro, "%02d/%02d/%04d", tm_info->tm_mday, tm_info->tm_mon + 1, tm_info->tm_year + 1900);
     base->contactos[base->cantidad++] = c;
 }
 
