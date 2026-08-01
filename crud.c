@@ -87,6 +87,30 @@ void leer(Base *base) {
     printf("\n");
 }
 
+int buscar_indice(Base *base, int id) {
+    for (int i = 0; i < base->cantidad; i++) {
+        if (base->contactos[i].id == id) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void actualizar(Base *base, int id, const char *nombre, const char *email, const char *telefono) {
+    int idx = buscar_indice(base, id);
+    if (idx == -1) {
+        printf("Contacto con ID %d no encontrado.\n", id);
+        return;
+    }
+    strncpy(base->contactos[idx].nombre, nombre, 49);
+    base->contactos[idx].nombre[49] = '\0';
+    strncpy(base->contactos[idx].email, email, 49);
+    base->contactos[idx].email[49] = '\0';
+    strncpy(base->contactos[idx].telefono, telefono, 19);
+    base->contactos[idx].telefono[19] = '\0';
+    printf("Contacto actualizado.\n");
+}
+
 void liberar(Base *base) {
     free(base->contactos);
     free(base);
@@ -139,7 +163,19 @@ int main() {
                 leer(base);
                 break;
             case 3:
-                printf("Funcionalidad de actualizacion aun no implementada.\n");
+                printf("ID a actualizar: ");
+                scanf("%d", &id);
+                while (getchar() != '\n');
+                printf("Nuevo nombre: ");
+                fgets(nombre, 50, stdin);
+                nombre[strcspn(nombre, "\n")] = '\0';
+                printf("Nuevo email: ");
+                fgets(email, 50, stdin);
+                email[strcspn(email, "\n")] = '\0';
+                printf("Nuevo telefono: ");
+                fgets(telefono, 20, stdin);
+                telefono[strcspn(telefono, "\n")] = '\0';
+                actualizar(base, id, nombre, email, telefono);
                 break;
             case 4:
                 printf("Funcionalidad de eliminacion aun no implementada.\n");
