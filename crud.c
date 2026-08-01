@@ -111,6 +111,19 @@ void actualizar(Base *base, int id, const char *nombre, const char *email, const
     printf("Contacto actualizado.\n");
 }
 
+void eliminar(Base *base, int id) {
+    int idx = buscar_indice(base, id);
+    if (idx == -1) {
+        printf("Contacto con ID %d no encontrado.\n", id);
+        return;
+    }
+    for (int i = idx; i < base->cantidad - 1; i++) {
+        base->contactos[i] = base->contactos[i + 1];
+    }
+    base->cantidad--;
+    printf("Contacto eliminado.\n");
+}
+
 void liberar(Base *base) {
     free(base->contactos);
     free(base);
@@ -178,7 +191,10 @@ int main() {
                 actualizar(base, id, nombre, email, telefono);
                 break;
             case 4:
-                printf("Funcionalidad de eliminacion aun no implementada.\n");
+                printf("ID a eliminar: ");
+                scanf("%d", &id);
+                while (getchar() != '\n');
+                eliminar(base, id);
                 break;
             case 5:
                 guardar(base, "contactos.dat");
